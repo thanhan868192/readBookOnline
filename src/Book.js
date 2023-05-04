@@ -5,7 +5,9 @@ const Book = (props) => {
 
   const showShelves = props.shelves.find(
     (s) => s.shelfName === props.book.shelf
-  )?.shelfName;
+  )
+    ? props.shelves.find((s) => s.shelfName === props.book.shelf).shelfName
+    : "none";
 
   return (
     <div className="book">
@@ -22,7 +24,7 @@ const Book = (props) => {
         ></div>
         <div className="book-shelf-changer">
           <select onChange={handleUpdateBookShelf} value={showShelves}>
-            <option value="none" disabled>
+            <option value="" disabled>
               Move to...
             </option>
             <option value="currentlyReading">Currently Reading</option>

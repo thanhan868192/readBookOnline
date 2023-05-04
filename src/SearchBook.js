@@ -12,7 +12,6 @@ const SearchBook = (props) => {
 
   const searchBooks = async () => {
     const res = await BooksAPI.search(query.trim(), 100);
-    console.log(props.books.concat(res));
     setResultSearchBooks(props.books.concat(res));
   };
 

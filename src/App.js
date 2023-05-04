@@ -21,7 +21,6 @@ function App() {
     const getBooks = async () => {
       const res = await BooksAPI.getAll();
       setBooks(res);
-      console.log(res);
     };
 
     getBooks();
