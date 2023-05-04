@@ -11,9 +11,9 @@ const SearchBook = (props) => {
   };
 
   const searchBooks = async () => {
-    const res = await BooksAPI.search(query.trim());
+    const res = await BooksAPI.search(query.trim(), 100);
+    console.log(props.books.concat(res));
     setResultSearchBooks(props.books.concat(res));
-    console.log(resultSearchBooks);
   };
 
   const debounce = (func, timeout = 500) => {
@@ -27,6 +27,20 @@ const SearchBook = (props) => {
   };
 
   const processChange = debounce(() => searchBooks());
+
+  const showingBooks =
+    query === ""
+      ? []
+      : resultSearchBooks.filter(
+          (item) =>
+            item?.title?.toLowerCase().includes(query.toLowerCase()) ||
+            item?.authors
+              ?.toString()
+              .toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+        );
+
+  console.log(showingBooks);
 
   return (
     <div className="search-books">
@@ -46,21 +60,17 @@ const SearchBook = (props) => {
       </div>
       <div className="search-books-results">
         <ol className="books-grid">
-          {query === ""
-            ? []
-            : resultSearchBooks && resultSearchBooks.length > 0
-            ? resultSearchBooks.map((book) => {
-                return (
-                  <li key={book.id}>
-                    <Book
-                      book={book}
-                      shelves={props.shelves}
-                      onUpdateBookShelf={props.onUpdateBookShelf}
-                    />
-                  </li>
-                );
-              })
-            : []}
+          {showingBooks.map((book) => {
+            return (
+              <li key={book.id}>
+                <Book
+                  book={book}
+                  shelves={props.shelves}
+                  onUpdateBookShelf={props.onUpdateBookShelf}
+                />
+              </li>
+            );
+          })}
         </ol>
       </div>
     </div>

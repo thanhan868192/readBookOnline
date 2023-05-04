@@ -3,6 +3,10 @@ const Book = (props) => {
     props.onUpdateBookShelf(props.book, event.target.value);
   };
 
+  const showShelves = props.shelves.find(
+    (s) => s.shelfName === props.book.shelf
+  )?.shelfName;
+
   return (
     <div className="book">
       <div className="book-top">
@@ -11,17 +15,13 @@ const Book = (props) => {
           style={{
             width: 128,
             height: 193,
-            backgroundImage: `url(${props.book.imageLinks.smallThumbnail})`,
+            backgroundImage: `url(${
+              props.book.imageLinks ? props.book.imageLinks.smallThumbnail : ""
+            })`,
           }}
         ></div>
         <div className="book-shelf-changer">
-          <select
-            onChange={handleUpdateBookShelf}
-            // value={
-            //   props.shelves.find((s) => s.shelfName === props.book.shelf)
-            //     .shelfDisplayName
-            // }
-          >
+          <select onChange={handleUpdateBookShelf} value={showShelves}>
             <option value="none" disabled>
               Move to...
             </option>
