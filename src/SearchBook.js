@@ -7,14 +7,26 @@ const SearchBook = (props) => {
   const [resultSearchBooks, setResultSearchBooks] = useState([]);
 
   const updateQuery = (query) => {
-    setQuery(query.trim());
-    const searchBooks = async () => {
-      const res = await BooksAPI.search(query.trim(), 10);
-      setResultSearchBooks(props.books.concat(res));
-      console.log(resultSearchBooks);
-    };
-    searchBooks();
+    setQuery(query);
   };
+
+  const searchBooks = async () => {
+    const res = await BooksAPI.search(query.trim());
+    setResultSearchBooks(props.books.concat(res));
+    console.log(resultSearchBooks);
+  };
+
+  const debounce = (func, timeout = 500) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, timeout);
+    };
+  };
+
+  const processChange = debounce(() => searchBooks());
 
   return (
     <div className="search-books">
@@ -25,6 +37,7 @@ const SearchBook = (props) => {
         <div className="search-books-input-wrapper">
           <input
             value={query}
+            onKeyUp={processChange}
             onChange={(event) => updateQuery(event.target.value)}
             type="text"
             placeholder="Search by title, author, or ISBN"
